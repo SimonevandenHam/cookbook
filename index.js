@@ -1,13 +1,23 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
-const UserCreateRouter = require("./userCreate/router");
+const userCreateRouter = require("./userCreate/router");
+const userLoginRouter = require("./userLogin/router");
+
 const app = express();
+
+const corsMiddleware = cors();
+app.use(corsMiddleware);
+
+const parserMiddleware = bodyParser.json();
+app.use(parserMiddleware);
+
 app.use(express.json());
 
 app.get("/", (req, res) => res.send());
 
-app.use(UserCreateRouter);
+app.use(userCreateRouter).use(userLoginRouter);
 
 const port = process.env.PORT || 4000;
 

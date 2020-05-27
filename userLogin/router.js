@@ -6,7 +6,7 @@ const User = require("../userCreate/model");
 
 const router = new Router();
 
-router.post("user/login", (req, res) => {
+router.post("/user/login", (req, res) => {
   const name = req.body.name;
   const password = req.body.password;
   if (!name || !password) {
@@ -44,25 +44,6 @@ router.post("user/login", (req, res) => {
         message: "Something went wrong",
       });
     });
-});
-
-router.get("/secret-endpoint", (req, res) => {
-  // do we have req.headers.authorization && if so: split the header on a space
-  const auth =
-    req.headers.authorization && req.headers.authorization.split(" ");
-  // is auth something && is the first element a string "Bearer" && do we have a token
-  if (auth && auth[0] === "Bearer" && auth[1]) {
-    // verify the token and get me the information inside (toData(auth[1]))
-    const data = toData(auth[1]);
-    res.send({
-      message: "Thanks for visiting the secret endpoint.",
-      data,
-    });
-  } else {
-    res.status(401).send({
-      message: "Please supply some valid credentials",
-    });
-  }
 });
 
 module.exports = router;

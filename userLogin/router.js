@@ -11,8 +11,10 @@ router.post("/user/login", (req, res) => {
   const password = req.body.password;
   if (!name || !password) {
     res.status(400).send({
+      //header info
       message: "Please supply a valid name and password",
     });
+    return;
   }
   // find user based on name
   User.findOne({

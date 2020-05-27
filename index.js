@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 
 const userCreateRouter = require("./userCreate/router");
 const userLoginRouter = require("./userLogin/router");
+const categoryRouter = require("./categories/router");
 
 const app = express();
 
@@ -17,7 +18,7 @@ app.use(express.json());
 
 app.get("/", (req, res) => res.send());
 
-app.use(userCreateRouter).use(userLoginRouter);
+app.use(userCreateRouter).use(userLoginRouter).use(categoryRouter);
 
 const port = process.env.PORT || 4000;
 

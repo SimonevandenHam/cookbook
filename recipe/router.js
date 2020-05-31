@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const Recipe = require("./model");
 const User = require("../userCreate/model");
 const auth = require("../userLogin/loginMiddleware");
+const Category = require("../categories/model");
 
 const router = Router();
 
@@ -37,9 +38,37 @@ router.post("recipe/new", auth, async (req, res, next) => {
   }
 });
 
-router.delete("/recipe/:id", (request, response, next) =>
-  Recipe.destroy({ where: { id: request.params.id } })
-    .then((number) => response.send({ number }))
+router.get("/recipe/list", auth, async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    await Recipe.findAll({
+      where: { userId: userId },
+      include: [Category],
+    }).then((recipes) => {
+      console.log(recipes);
+      res.send(recipes);
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/recipe/:recipeId", auth, async (req, res, next) => {
+  try {
+    const { recipeId } = request.params;
+    const query = {
+      include: [Category],
+    };
+    const getRecipe = await Recipe.findByPk(recipeId, query);
+    res.send(getRecipe);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/recipe/:recipeId", (req, res, next) =>
+  Recipe.destroy({ where: { recipeId: req.params.id } })
+    .then((number) => res.send({ number }))
     .catch(next)
 );
 

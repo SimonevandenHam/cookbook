@@ -39,6 +39,20 @@ router.post("/recipe/new", auth, async (req, res, next) => {
   }
 });
 
+router.post("/recipe/:recipeId/recipeimage", auth, async (req, res, nest) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/recipe/:recipeId/userimage", auth, async (req, res, nest) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/recipe/list", auth, async (req, res, next) => {
   try {
     const userId = req.user.id;
@@ -67,11 +81,17 @@ router.get("/recipe/:recipeId", auth, async (req, res, next) => {
   }
 });
 
-router.put("/recipe/:reci[eId");
-
-router.post("/recipe/:recipeId/recipeimage");
-
-router.post("/recipe/:recipeId/userimage");
+router.put("/recipe/:recipeId", auth, (req, res, next) => {
+  Recipe.findByPk(req.params.recipeId)
+    .then((recipe) => {
+      if (recipe) {
+        recipe.update(req.body).then((recipe) => res.json(recipe));
+      } else {
+        res.status(404).end();
+      }
+    })
+    .catch(next);
+});
 
 router.delete("/recipe/:recipeId", (req, res, next) =>
   Recipe.destroy({ where: { recipeId: req.params.id } })

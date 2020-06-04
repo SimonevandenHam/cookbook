@@ -8,7 +8,7 @@ const Category = require("../categories/model");
 
 const router = Router();
 
-router.post("recipe/new", auth, async (req, res, next) => {
+router.post("/recipe/new", auth, async (req, res, next) => {
   try {
     const {
       name,
@@ -31,8 +31,9 @@ router.post("recipe/new", auth, async (req, res, next) => {
     const newRecipe = await Recipe.create(entity);
 
     const dbUser = await User.findByPk(req.user.id);
-    dbUser.addRecipe(newConcert.id);
-    res.send(newRecipe);
+    await dbUser.addRecipe(newRecipe.id);
+    const recipe = await Recipe.findByPk(newRecipe.id);
+    res.send(recipe);
   } catch (error) {
     next(error);
   }
@@ -66,11 +67,19 @@ router.get("/recipe/:recipeId", auth, async (req, res, next) => {
   }
 });
 
+router.put("/recipe/:reci[eId");
+
+router.post("/recipe/:recipeId/recipeimage");
+
+router.post("/recipe/:recipeId/userimage");
+
 router.delete("/recipe/:recipeId", (req, res, next) =>
   Recipe.destroy({ where: { recipeId: req.params.id } })
     .then((number) => res.send({ number }))
     .catch(next)
 );
+
+router.delete("/recipe/:imageId");
 
 module.exports = router;
 

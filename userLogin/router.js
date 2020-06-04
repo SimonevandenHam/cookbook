@@ -7,8 +7,8 @@ const User = require("../userCreate/model");
 const router = new Router();
 
 router.post("/user/login", (req, res) => {
-  const name = req.body.name;
-  const password = req.body.password;
+  const name = req.body.user.name;
+  const password = req.body.user.password;
   if (!name || !password) {
     res.status(400).send({
       //header info
@@ -19,7 +19,7 @@ router.post("/user/login", (req, res) => {
   // find user based on name
   User.findOne({
     where: {
-      name: req.body.name,
+      name: req.body.user.name,
     },
   })
     .then((user) => {
@@ -29,7 +29,7 @@ router.post("/user/login", (req, res) => {
         });
       }
       // use bcrypt.compareSync to check the password against the stored hash
-      else if (bcrypt.compareSync(req.body.password, user.password)) {
+      else if (bcrypt.compareSync(req.body.user.password, user.password)) {
         // if the password is correct, return a JWT with the userId of the user (user.id)
         res.send({
           jwt: toJWT({ userId: user.id }),

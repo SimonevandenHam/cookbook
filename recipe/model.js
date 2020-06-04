@@ -3,6 +3,7 @@ const db = require("../db");
 
 const User = require("../userCreate/model");
 const Category = require("../categories/model");
+const Image = require("../images/model");
 
 const Recipe = db.define(
   "recipe",
@@ -15,7 +16,7 @@ const Recipe = db.define(
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    recipeDiscription: {
+    recipeDescription: {
       type: Sequelize.STRING,
       allowNull: true,
     },
@@ -45,5 +46,8 @@ User.hasMany(Recipe);
 
 Recipe.belongsTo(Category);
 Category.hasMany(Recipe);
+
+Image.belongsTo(Recipe);
+Recipe.hasMany(Image);
 
 module.exports = Recipe;

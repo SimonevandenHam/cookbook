@@ -13,7 +13,7 @@ router.post("/recipe/new", auth, async (req, res, next) => {
     const {
       name,
       cookingTime,
-      recipeDiscription,
+      recipeDescription,
       ingredients,
       recipeNotes,
       isFavorite,
@@ -22,7 +22,7 @@ router.post("/recipe/new", auth, async (req, res, next) => {
     const entity = {
       name,
       cookingTime,
-      recipeDiscription,
+      recipeDescription,
       ingredients,
       recipeNotes,
       isFavorite,
@@ -39,14 +39,18 @@ router.post("/recipe/new", auth, async (req, res, next) => {
   }
 });
 
-router.post("/recipe/:recipeId/recipeimage", auth, async (req, res, nest) => {
+router.post("/recipe/:recipeId/recipeimage", auth, async (req, res, next) => {
   try {
+    const { recipeId } = req.params;
+    const getRecipe = await Recipe.findByPk(recipeId);
+    console.log(recipeId);
+    res.send(getRecipe);
   } catch (error) {
     next(error);
   }
 });
 
-router.post("/recipe/:recipeId/userimage", auth, async (req, res, nest) => {
+router.post("/recipe/:recipeId/userimage", auth, async (req, res, next) => {
   try {
   } catch (error) {
     next(error);
@@ -70,7 +74,7 @@ router.get("/recipe/list", auth, async (req, res, next) => {
 
 router.get("/recipe/:recipeId", auth, async (req, res, next) => {
   try {
-    const { recipeId } = request.params;
+    const { recipeId } = req.params;
     const query = {
       include: [Category],
     };
@@ -81,7 +85,7 @@ router.get("/recipe/:recipeId", auth, async (req, res, next) => {
   }
 });
 
-router.put("/recipe/:recipeId", auth, (req, res, next) => {
+router.put("/recipe/edit/:recipeId", auth, (req, res, next) => {
   Recipe.findByPk(req.params.recipeId)
     .then((recipe) => {
       if (recipe) {

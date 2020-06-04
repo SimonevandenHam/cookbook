@@ -6,6 +6,7 @@ const userCreateRouter = require("./userCreate/router");
 const userLoginRouter = require("./userLogin/router");
 const categoryRouter = require("./categories/router");
 const recipeRouter = require("./recipe/router");
+const imageRouter = require("./images/router");
 
 const app = express();
 
@@ -23,7 +24,8 @@ app
   .use(userCreateRouter)
   .use(userLoginRouter)
   .use(categoryRouter)
-  .use(recipeRouter);
+  .use(recipeRouter)
+  .use(imageRouter);
 
 const port = process.env.PORT || 4000;
 

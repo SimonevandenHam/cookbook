@@ -1,10 +1,11 @@
 const { Router } = require("express");
 const bcrypt = require("bcrypt");
 
+const auth = require("../userLogin/loginMiddleware");
 const Recipe = require("./model");
 const User = require("../userCreate/model");
-const auth = require("../userLogin/loginMiddleware");
 const Category = require("../categories/model");
+const Image = require("../images/model");
 
 const router = Router();
 
@@ -43,15 +44,15 @@ router.post("/recipe/:recipeId/recipeimage", auth, async (req, res, next) => {
   try {
     const { recipeId } = req.params;
     const getRecipe = await Recipe.findByPk(recipeId);
-    console.log(recipeId);
-    res.send(getRecipe);
-  } catch (error) {
-    next(error);
-  }
-});
 
-router.post("/recipe/:recipeId/userimage", auth, async (req, res, next) => {
-  try {
+    const { image, type } = req.body.image;
+    const entity = { image, type };
+
+    const addImage = await Image.create(entity);
+
+    await getRecipe.addImage(addImage.id);
+    const recipe = await Recipe.findByPk(getRecipe.id);
+    res.send(recipe);
   } catch (error) {
     next(error);
   }
@@ -62,7 +63,7 @@ router.get("/recipe/list", auth, async (req, res, next) => {
     const userId = req.user.id;
     await Recipe.findAll({
       where: { userId: userId },
-      include: [Category],
+      include: [Category, Image],
     }).then((recipes) => {
       console.log(recipes);
       res.send(recipes);
@@ -76,7 +77,7 @@ router.get("/recipe/:recipeId", auth, async (req, res, next) => {
   try {
     const { recipeId } = req.params;
     const query = {
-      include: [Category],
+      include: [Category, Image],
     };
     const getRecipe = await Recipe.findByPk(recipeId, query);
     res.send(getRecipe);
@@ -106,12 +107,3 @@ router.delete("/recipe/:recipeId", (req, res, next) =>
 router.delete("/recipe/:imageId");
 
 module.exports = router;
-
-// POST /recipe/new
-// GET /recipe/list
-// GET /recipe/{recipe_id}
-// PUT /recipe/{recipe_id} (opslaan wijzigingen)
-// POST /recipe/{recipe_id}/recipe_image
-// POST /recipe/{recipe_id}/user_image
-// DELETE /recipe/{recipe_id}
-// DELETE /recipe/{image_id}

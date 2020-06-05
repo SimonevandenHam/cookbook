@@ -2,19 +2,19 @@ const Sequelize = require("sequelize");
 const db = require("../db");
 
 const Image = db.define(
-  "recipes",
+  "image",
   {
-    recipeImage: {
+    image: {
       type: Sequelize.TEXT,
       allowNull: true,
     },
-    userImage: {
+    type: {
       type: Sequelize.TEXT,
       allowNull: true,
     },
   },
   {
-    tableName: "Recipies",
+    tableName: "images",
   }
 );
 module.exports = Image;

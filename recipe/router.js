@@ -50,9 +50,8 @@ router.post("/recipe/:recipeId/recipeimage", auth, async (req, res, next) => {
 
     const addImage = await Image.create(entity);
 
-    const dbUser = await User.findByPk(req.user.id);
-    await dbUser.addImage(getRecipe.id);
-    const recipe = await Recipe.findByPk(addImage.id);
+    await getRecipe.addImage(addImage.id);
+    const recipe = await Recipe.findByPk(getRecipe.id);
     res.send(recipe);
   } catch (error) {
     next(error);

@@ -4,11 +4,11 @@ const db = require("../db");
 const Image = db.define(
   "image",
   {
-    recipeImage: {
+    image: {
       type: Sequelize.TEXT,
       allowNull: true,
     },
-    userImage: {
+    type: {
       type: Sequelize.TEXT,
       allowNull: true,
     },

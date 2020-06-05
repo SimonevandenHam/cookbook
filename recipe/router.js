@@ -58,13 +58,6 @@ router.post("/recipe/:recipeId/recipeimage", auth, async (req, res, next) => {
   }
 });
 
-router.post("/recipe/:recipeId/userimage", auth, async (req, res, next) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.get("/recipe/list", auth, async (req, res, next) => {
   try {
     const userId = req.user.id;
@@ -84,7 +77,7 @@ router.get("/recipe/:recipeId", auth, async (req, res, next) => {
   try {
     const { recipeId } = req.params;
     const query = {
-      include: [Category],
+      include: [Category, Image],
     };
     const getRecipe = await Recipe.findByPk(recipeId, query);
     res.send(getRecipe);
@@ -114,12 +107,3 @@ router.delete("/recipe/:recipeId", (req, res, next) =>
 router.delete("/recipe/:imageId");
 
 module.exports = router;
-
-// POST /recipe/new
-// GET /recipe/list
-// GET /recipe/{recipe_id}
-// PUT /recipe/{recipe_id} (opslaan wijzigingen)
-// POST /recipe/{recipe_id}/recipe_image
-// POST /recipe/{recipe_id}/user_image
-// DELETE /recipe/{recipe_id}
-// DELETE /recipe/{image_id}

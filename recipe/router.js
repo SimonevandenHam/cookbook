@@ -1,10 +1,11 @@
 const { Router } = require("express");
 const bcrypt = require("bcrypt");
 
+const auth = require("../userLogin/loginMiddleware");
 const Recipe = require("./model");
 const User = require("../userCreate/model");
-const auth = require("../userLogin/loginMiddleware");
 const Category = require("../categories/model");
+const Image = require("../images/model");
 
 const router = Router();
 
@@ -43,8 +44,16 @@ router.post("/recipe/:recipeId/recipeimage", auth, async (req, res, next) => {
   try {
     const { recipeId } = req.params;
     const getRecipe = await Recipe.findByPk(recipeId);
-    console.log(recipeId);
-    res.send(getRecipe);
+
+    const { image, type } = req.body.image;
+    const entity = { image, type };
+
+    const addImage = await Image.create(entity);
+
+    const dbUser = await User.findByPk(req.user.id);
+    await dbUser.addImage(getRecipe.id);
+    const recipe = await Recipe.findByPk(addImage.id);
+    res.send(recipe);
   } catch (error) {
     next(error);
   }
@@ -62,7 +71,7 @@ router.get("/recipe/list", auth, async (req, res, next) => {
     const userId = req.user.id;
     await Recipe.findAll({
       where: { userId: userId },
-      include: [Category],
+      include: [Category, Image],
     }).then((recipes) => {
       console.log(recipes);
       res.send(recipes);

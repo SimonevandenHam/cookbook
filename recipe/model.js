@@ -36,7 +36,7 @@ const Recipe = db.define(
     },
   },
   {
-    tableName: "Recipies",
+    tableName: "recipies",
   }
 );
 

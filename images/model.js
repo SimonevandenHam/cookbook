@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const db = require("../db");
 
 const Image = db.define(
-  "recipes",
+  "image",
   {
     recipeImage: {
       type: Sequelize.TEXT,
@@ -14,7 +14,7 @@ const Image = db.define(
     },
   },
   {
-    tableName: "Recipies",
+    tableName: "images",
   }
 );
 module.exports = Image;
